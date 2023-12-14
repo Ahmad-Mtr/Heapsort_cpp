@@ -1,8 +1,8 @@
 #include <iostream>
 
 using namespace std;
-const int n = 10;
-int A[n] = {11, 6, 0, 10, 9, 1, 1, 15, 8, 4};
+const int n = 5;
+int A[n] = {3,7,5,1,9};
 
 int getLeft(int index) {
     return index * 2 + 1;
@@ -12,10 +12,16 @@ int getRight(int index) {
     return index * 2 + 2;
 }
 
-int getLastIndex(int a) {
-    return n - a - 1;
+int getLastIndex(int i) {
+    return n - i - 1;
+}
+int _L(int j){
+    return 2*j;
 }
 
+int _R(int j){
+    return 2*j+1;
+}
 void Swap(int indexA, int indexB) {
     int temp = A[indexA];
     A[indexA] = A[indexB];
@@ -36,7 +42,60 @@ void Heapify() {
     }
 }
 
-void HeapSort() {
+void HeapSort_DrSamer_original() {
+    Heapify();
+    // Exactly as Notes except lastIndex()
+    for (int i = 1; i < n; ++i) {
+        int j = 1;
+        Swap(j, getLastIndex(i));
+
+        while ((2 * j) < getLastIndex(i)) {
+            if (A[2 * j] > A[j]) {
+                if ((2 * j + 1) < getLastIndex(i)) {
+                    if (A[2 * j] > A[2 * j + 1]) {
+                        Swap(2 * j, j);
+                        j = 2 * j;
+                    } else {
+                        Swap(j, 2 * j + 1);
+                        j = 2 * j + 1;
+                    }
+                } else {
+                    Swap(j, 2 * j + 1);
+                    j = 2 * j;
+                }
+            } else if (((2 * j + 1) < getLastIndex(i)) && (A[2 * j + 1] > A[j])) {
+                Swap(j, 2 * j + 1);
+
+            } else break;
+        }
+    }
+}
+void HeapSort_DrSamer_fixedIndex() {
+    Heapify();
+    for (int i: A) {
+        cout << i << "~~";
+    }
+    cout<<endl;
+    // Fixed Index as Doctor's Code
+    for (int i = 0; i < n; ++i) {
+        int j = 0;
+        Swap(j,n-i-1);
+        while(_L(j)< getLastIndex(i)){
+            if (A[_L(j)] > A[j]){
+                if (_R(j) > getLastIndex(i)){
+                    
+                }
+            }
+        }
+
+    }
+    for (int i: A) {
+        cout << i << "~~#";
+    }
+    cout<<endl;
+}
+void HeapSort_sol() {
+    Heapify();
     for (int i = n - 1; i > 0; --i) {
         Swap(0, i);
         int j = 0;
@@ -54,11 +113,10 @@ void HeapSort() {
         }
     }
 }
-
-
 int main() {
-    Heapify();
-    HeapSort();
+    //HeapSort_DrSamer_original();
+    HeapSort_DrSamer_fixedIndex();
+    HeapSort_sol();
     for (int i: A) {
         cout << i << "\t";
     }
